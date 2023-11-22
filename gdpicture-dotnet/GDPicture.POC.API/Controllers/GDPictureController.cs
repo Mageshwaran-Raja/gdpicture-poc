@@ -10,7 +10,7 @@ namespace GDPicture.POC.API.Controllers
         public GDPictureController()
         {
             LicenseManager oLicenseManager = new LicenseManager();
-            oLicenseManager.RegisterKEY("you-licence-key");
+            oLicenseManager.RegisterKEY("your-license-key");
         }
         [HttpPost("TIFFtoPDF")]
         public IActionResult TIFFtoPDF(IFormFile file)
@@ -72,7 +72,7 @@ namespace GDPicture.POC.API.Controllers
             //  using (GdPicturePDF oConverter = new GdPicturePDF())
             {
                 //Select your source document and its document format.
-                GdPictureStatus status = oConverter.LoadFromStream(file.OpenReadStream());
+                GdPictureStatus status = oConverter.LoadFromStream(file.OpenReadStream(), GdPicture14.DocumentFormat.DocumentFormatDOCX);
 
                 //oConverter.LoadFromFile("input.docx", GdPicture14.DocumentFormat.DocumentFormatDOCX);
                 if (status == GdPictureStatus.OK)
