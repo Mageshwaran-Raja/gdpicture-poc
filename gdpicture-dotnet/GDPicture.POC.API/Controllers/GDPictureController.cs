@@ -44,12 +44,10 @@ namespace GDPicture.POC.API.Controllers
                                                                     false, false, true, false) == GdPictureStatus.OK) &&
                                     (oGdPicturePDF.SaveToFile("OCR3.pdf", true, true) == GdPictureStatus.OK))
                                 {
-                                    //MessageBox.Show("Done!", "OCR Example", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     Console.WriteLine("Done");
                                 }
                                 else
                                 {
-                                    //MessageBox.Show("Error when saving the document: " + oGdPicturePDF.GetStat().ToString(), "OCR Example", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     Console.WriteLine("Error");
                                 }
                             }
@@ -57,7 +55,6 @@ namespace GDPicture.POC.API.Controllers
                     }
                     else
                     {
-                        //MessageBox.Show("Error when processing the OCR: " + oGdPictureOCR.GetStat().ToString(), "OCR Example", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Console.WriteLine("Error");
                     }
                 }
