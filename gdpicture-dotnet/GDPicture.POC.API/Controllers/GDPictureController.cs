@@ -84,7 +84,9 @@ namespace GDPicture.POC.API.Controllers
                     status = oConverter.SaveAsPDF("out2.pdf", PdfConformance.PDF_A_1a);
                     if (status == GdPictureStatus.OK)
                     {
-                        Console.WriteLine("Success");
+                        byte[] pdfBytes = System.IO.File.ReadAllBytes("out2.pdf");
+                        System.IO.File.Delete("out2.pdf");
+                        return File(pdfBytes, "application/pdf", "output.pdf");
                     }
                     else
                     {
@@ -97,7 +99,7 @@ namespace GDPicture.POC.API.Controllers
                 }
             }
 
-            return File("out2.pdf", "application/pdf", "output.pdf");
+            return BadRequest("Failed to Convert to PDF");
         }
     }
 }
