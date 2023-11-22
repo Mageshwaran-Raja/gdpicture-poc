@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GdPicture.NET.14.API">
+      <HintPath>D:\GdPicture.NET 14\Redist\GdPicture.NET.API (.NET 6.0)\GdPicture.NET.14.API.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
