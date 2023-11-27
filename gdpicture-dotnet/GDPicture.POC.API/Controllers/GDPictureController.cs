@@ -10,7 +10,7 @@ namespace GDPicture.POC.API.Controllers
         public GDPictureController()
         {
             LicenseManager oLicenseManager = new LicenseManager();
-            oLicenseManager.RegisterKEY("your-license-key");
+            oLicenseManager.RegisterKEY("0402583831552455551491240");
         }
         [HttpPost("TIFFtoPDF")]
         public IActionResult TIFFtoPDF(IFormFile file)
@@ -95,7 +95,6 @@ namespace GDPicture.POC.API.Controllers
                     Console.WriteLine("Error");
                 }
             }
-
             return BadRequest("Failed to Convert to PDF");
         }
     }

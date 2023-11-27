@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IO.Packaging" Version="7.0.0" />
   </ItemGroup>
@@ -14,6 +15,9 @@
   <ItemGroup>
     <Reference Include="GdPicture.NET.14.API">
       <HintPath>D:\GdPicture.NET 14\Redist\GdPicture.NET.API (.NET 6.0)\GdPicture.NET.14.API.dll</HintPath>
+    </Reference>
+    <Reference Include="GdPicture.NET.14.WEB.DocuVieware.API">
+      <HintPath>D:\GdPicture.NET 14\Redist\DocuVieware (.NET 6.0)\GdPicture.NET.14.WEB.DocuVieware.API.dll</HintPath>
     </Reference>
   </ItemGroup>
 
