@@ -97,5 +97,89 @@ namespace GDPicture.POC.API.Controllers
             }
             return BadRequest("Failed to Convert to PDF");
         }
+
+        [HttpPost("MergePDF")]
+        public IActionResult MergePDF(List<IFormFile> files)
+        {
+            GdPicturePDF[] arPDF = new GdPicturePDF[files.Count];
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                arPDF[i] = new GdPicturePDF();
+            }
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (arPDF[i].LoadFromStream(files[i].OpenReadStream(), false) == GdPictureStatus.OK)
+                {
+
+                }
+            }
+            GdPicturePDF gdPicturePDF = arPDF[0].MergeDocuments(arPDF);
+            GdPictureStatus status = arPDF[0].GetStat();
+            if (status == GdPictureStatus.OK)
+            {
+                //MessageBox.Show("All documents have been successfully merged.", "Example: MergeDocuments");
+                if (gdPicturePDF.SaveToFile("test_merged.pdf") == GdPictureStatus.OK)
+                {
+                    //MessageBox.Show("Merged document has been successfully saved.", "Example: MergeDocuments");
+                    gdPicturePDF.CloseDocument();
+                }
+            }
+            else
+            {
+                //MessageBox.Show("The MergeDocuments() method has failed with the status: " + status.ToString(), "Example: MergeDocuments");
+            }
+            gdPicturePDF.Dispose();
+            foreach (var pdf in arPDF)
+            {
+                pdf.Dispose();
+            }
+            byte[] pdfBytes = System.IO.File.ReadAllBytes("test_merged.pdf");
+            System.IO.File.Delete("test_merged.pdf");
+            return File(pdfBytes, "application/pdf", "test_merged.pdf");
+        }
+
+        [HttpPost("MergePDFFromFile")]
+        public IActionResult MergePDFFromFile()
+        {
+            GdPicturePDF[] arPDF = new GdPicturePDF[3];
+            arPDF[0] = new GdPicturePDF();
+            arPDF[1] = new GdPicturePDF();
+            arPDF[2] = new GdPicturePDF();
+            if ((arPDF[0].LoadFromFile("out1.pdf", false) == GdPictureStatus.OK) &&
+                (arPDF[1].LoadFromFile("out2.pdf", false) == GdPictureStatus.OK) &&
+                (arPDF[2].LoadFromFile("out3.pdf", false) == GdPictureStatus.OK))
+            {
+                GdPicturePDF dstPDF = arPDF[0].MergeDocuments(arPDF);
+                //You can use also arPDF[1] or arPDF[2] object to call the MergeDocuments method.
+                GdPictureStatus status = arPDF[0].GetStat();
+                if (status == GdPictureStatus.OK)
+                {
+                    //MessageBox.Show("All documents have been successfully merged.", "Example: MergeDocuments");
+                    if (dstPDF.SaveToFile("test_merged.pdf") == GdPictureStatus.OK)
+                    {
+                        //MessageBox.Show("Merged document has been successfully saved.", "Example: MergeDocuments");
+                        dstPDF.CloseDocument();
+                    }
+                }
+                else
+                {
+                    //MessageBox.Show("The MergeDocuments() method has failed with the status: " + status.ToString(), "Example: MergeDocuments");
+                }
+                dstPDF.Dispose();
+                arPDF[2].CloseDocument();
+                arPDF[1].CloseDocument();
+                arPDF[0].CloseDocument();
+            }
+            else
+            {
+                //MessageBox.Show("Loading of the source documents has failed.", "Example: MergeDocuments");
+            }
+            arPDF[2].Dispose();
+            arPDF[1].Dispose();
+            arPDF[0].Dispose();
+            return Ok();
+        }
     }
 }
