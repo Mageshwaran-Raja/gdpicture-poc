@@ -7,11 +7,7 @@ namespace GDPicture.POC.API.Controllers
     [ApiController]
     public class GDPictureController : ControllerBase
     {
-        public GDPictureController()
-        {
-            LicenseManager oLicenseManager = new LicenseManager();
-            oLicenseManager.RegisterKEY("0402583831552455551491240");
-        }
+        public GDPictureController() { }
         [HttpPost("TIFFtoPDF")]
         public IActionResult TIFFtoPDF(IFormFile file)
         {
