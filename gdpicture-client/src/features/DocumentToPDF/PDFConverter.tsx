@@ -10,7 +10,6 @@ export default function PDFConverter() {
 
     function onClickHandler() {
         const data = new FormData();
-
         data.append("file", fileSelected);
 
         agent.GDPicture.convertToPDF(data);

@@ -34,6 +34,7 @@ const request = {
 
 const GDPicture = {
     convertToPDF: (file: any) => request.postFile("GDPicture/ConvertDocumentToPDF", file),
+    mergePDF: (file: any) => request.postFile("GDPicture/MergePDF", file),
     viewDocument: (config: DocuViewareConfig) => request.post("DocumentViewer/GetDocuViewareControl", config)
 }
 

@@ -13,15 +13,12 @@ namespace GDPicture.POC.API.Controllers
         {
             if (!DocuViewareManager.IsSessionAlive(controlConfiguration.SessionId))
             {
-                if (!string.IsNullOrEmpty(controlConfiguration.SessionId) && !string.IsNullOrEmpty(controlConfiguration.ControlId))
-                {
-                    DocuViewareManager.CreateDocuViewareSession(controlConfiguration.SessionId,
-                        controlConfiguration.ControlId, 20);
-                }
-                else
-                {
+                if (string.IsNullOrWhiteSpace(controlConfiguration.SessionId) && string.IsNullOrWhiteSpace(controlConfiguration.ControlId))
                     throw new Exception("Invalid session identifier and/or invalid control identifier.");
-                }
+               
+                DocuViewareManager.CreateDocuViewareSession(controlConfiguration.SessionId,
+                        controlConfiguration.ControlId, 20);
+                
             }
             using (DocuViewareControl docuVieware = new DocuViewareControl(controlConfiguration.SessionId))
             {
