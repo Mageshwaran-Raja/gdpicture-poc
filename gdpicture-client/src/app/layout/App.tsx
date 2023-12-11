@@ -3,6 +3,8 @@ import '../../App.css';
 import { useEffect } from 'react';
 import agent from '../api/agent';
 import Notification from '../../components/Notification';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -21,6 +23,7 @@ function App() {
     <>
       <Notification />
       <Outlet />
+      <ToastContainer />
     </>
   );
 }

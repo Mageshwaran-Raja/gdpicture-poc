@@ -1,5 +1,6 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import { useRef, useState } from "react";
+import { toast } from 'react-toastify';
 
 export default function Notification() {
     const notificationRef = useRef<HTMLDivElement>(null);
@@ -17,10 +18,16 @@ export default function Notification() {
         console.error(`Error starting connection: ${error}`);
     });
 
+    const notify = (message: string) => toast.success(message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 6000
+    });
+
     // Receive message
     connection.on('ConversionCompleted', (message: any) => {
         console.log(`Received message: ${message.message}`);
         console.log(`File Link: ${message.fileURL}`);
+        notify(message.message);
         // Handle the received message as needed
     });
 

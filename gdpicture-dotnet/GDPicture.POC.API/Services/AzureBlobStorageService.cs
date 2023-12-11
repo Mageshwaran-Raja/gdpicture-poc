@@ -29,8 +29,8 @@ namespace GDPicture.POC.API.Services
             if (await blob.ExistsAsync())
             {
                 var property = blob.GetProperties().Value.Metadata;
-                var fileGuid = property.Where(x => x.Key == "fileId").First().Value;
-                var contentType = property.Where(x => x.Key == "fileType").First().Value;
+                var fileGuid = property.Where(x => x.Key == "FileId").First().Value;
+                var contentType = property.Where(x => x.Key == "ContentType").First().Value;
 
                 if (fileGuid == guidId && contentType != "pdf")
                 {
@@ -93,14 +93,22 @@ namespace GDPicture.POC.API.Services
 
             BlobClient blob = containerClient.GetBlobClient(file.FileName);
 
-            IDictionary<string, string> metadata = new Dictionary<string, string>();
             await blob.UploadAsync(uploadFileStream, true);
 
-            // Add metadata to the dictionary by calling the Add method
-            metadata.Add("fileId", reqId);
-            metadata.Add("fileType", file.ContentType);
+            var metadata = GenerateMetaData(reqId, file.ContentType);
+
             await blob.SetMetadataAsync(metadata);
             uploadFileStream.Close();
+        }
+
+        private IDictionary<string, string> GenerateMetaData(string fileId, string contentType)
+        {
+            var metadata = new Dictionary<string, string>();
+
+            metadata.Add("FileId", fileId);
+            metadata.Add("ContentType", contentType);
+
+            return metadata;
         }
 
         private Stream ConvertToPDF(Stream fileStream, string fileName)
