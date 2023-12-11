@@ -1,4 +1,6 @@
 using GDPicture.POC.API;
+using GDPicture.POC.API.Services;
+using GDPicture.POC.API.SignalR;
 using GdPicture14;
 using GdPicture14.WEB;
 
@@ -9,6 +11,10 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
+builder.Services.AddScoped<IAzureServiceBusQueue, AzureServiceBusQueue>();
 
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,12 +42,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseSession();
 
+app.UseRouting();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseCors(options => options.
     AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials());
 
-app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+    endpoints.MapHub<NotificationHub>("/signalr/notificationHub")
+);
+
 
 app.MapControllers();
 

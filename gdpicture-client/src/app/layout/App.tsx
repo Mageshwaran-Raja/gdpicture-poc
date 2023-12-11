@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import '../../App.css';
 import { useEffect } from 'react';
 import agent from '../api/agent';
+import Notification from '../../components/Notification';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
 
   return (
     <>
+      <Notification />
       <Outlet />
     </>
   );
