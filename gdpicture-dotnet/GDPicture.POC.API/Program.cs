@@ -3,6 +3,7 @@ using GDPicture.POC.API.Services;
 using GDPicture.POC.API.SignalR;
 using GdPicture14;
 using GdPicture14.WEB;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
 builder.Services.AddScoped<IAzureServiceBusQueue, AzureServiceBusQueue>();
+
+builder.Services.AddAzureClients(opt => {
+    opt.AddBlobServiceClient(builder.Configuration.GetValue<string>("StorageConnectionAppSetting"));
+});
 
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

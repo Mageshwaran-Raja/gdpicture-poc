@@ -32,13 +32,7 @@ namespace GDPicture.POC.API.Controllers
         public async Task<IActionResult> Upload(IFormFile formFile)
         {
             var id = await _azureServiceBusQueue.SendMessageAsync(formFile);
-            //NotificationMessage message = new NotificationMessage
-            //{
-            //    Id = id,
-            //    Message = "In Progress",
-            //    FileURL = ""
-            //};
-            //await _hubContext.Clients.All.SendAsync("ConversionCompleted", message);
+
             return Accepted(
                 new {
                     Id = id,

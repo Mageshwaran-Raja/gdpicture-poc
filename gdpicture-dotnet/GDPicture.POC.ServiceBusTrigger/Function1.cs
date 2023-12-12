@@ -38,6 +38,7 @@ namespace GDPicture.POC.ServiceBusTrigger
                     if (response.IsSuccessStatusCode)
                     {
                         var responseContent = await response.Content.ReadAsStringAsync();
+                        log.LogInformation("File Converted to PDF");
                     }
                     else
                     {

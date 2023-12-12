@@ -7,20 +7,19 @@ namespace GDPicture.POC.API.Services
     public class AzureBlobStorageService : IAzureBlobStorageService
     {
         private readonly IConfiguration _configuration;
-        private readonly string _connectionString;
+        private readonly BlobServiceClient _blobServiceClient;
         private readonly string _containerName;
 
-        public AzureBlobStorageService(IConfiguration configuration)
+        public AzureBlobStorageService(IConfiguration configuration, BlobServiceClient blobServiceClient)
         {
             _configuration = configuration;
-            _connectionString = _configuration["StorageConnectionAppSetting"];
+            _blobServiceClient = blobServiceClient;
             _containerName = _configuration["ContainerName"];
         }
 
         public async Task<NotificationMessage> GetFileAsync(string guidId, string filename)
         {
-            var serviceClient = new BlobServiceClient(_connectionString);
-            var containerClient = serviceClient.GetBlobContainerClient(_containerName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
 
             BlobClient blob = containerClient.GetBlobClient(filename);
             NotificationMessage message = new();
@@ -49,11 +48,9 @@ namespace GDPicture.POC.API.Services
 
                                 BlobClient pdfConvertedBlob = containerClient.GetBlobClient("output.pdf");
 
-                                IDictionary<string, string> metadata = new Dictionary<string, string>();
+                                var metadata = GenerateMetaData(guidId, "pdf");
                                 await pdfConvertedBlob.UploadAsync(uploadFileStream, true);
 
-                                metadata.Add("fileId", guidId);
-                                metadata.Add("fileType", "pdf");
                                 await pdfConvertedBlob.SetMetadataAsync(metadata);
 
                                 uploadFileStream.Close();
@@ -86,54 +83,44 @@ namespace GDPicture.POC.API.Services
 
         public async Task UploadAsync(IFormFile file, string reqId)
         {
-            var serviceClient = new BlobServiceClient(_connectionString);
-            var containerClient = serviceClient.GetBlobContainerClient(_containerName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
 
-            using Stream uploadFileStream = file.OpenReadStream();
+            using (var uploadStream = file.OpenReadStream())
+            {
+                var blob = containerClient.GetBlobClient(file.FileName);
+                await blob.UploadAsync(uploadStream, true);
 
-            BlobClient blob = containerClient.GetBlobClient(file.FileName);
-
-            await blob.UploadAsync(uploadFileStream, true);
-
-            var metadata = GenerateMetaData(reqId, file.ContentType);
-
-            await blob.SetMetadataAsync(metadata);
-            uploadFileStream.Close();
+                var metadata = GenerateMetaData(reqId, file.ContentType);
+                await blob.SetMetadataAsync(metadata);
+            }
         }
 
         private IDictionary<string, string> GenerateMetaData(string fileId, string contentType)
         {
-            var metadata = new Dictionary<string, string>();
-
-            metadata.Add("FileId", fileId);
-            metadata.Add("ContentType", contentType);
-
+            var metadata = new Dictionary<string, string>
+            {
+                { "FileId", fileId },
+                { "ContentType", contentType },
+            };
             return metadata;
         }
 
-        private Stream ConvertToPDF(Stream fileStream, string fileName)
+        private async Task ConvertToPDF(Stream fileStream, string fileName)
         {
-
-            LicenseManager licenseManager = new LicenseManager();
-            licenseManager.RegisterKEY("0402583831552455551491240");
-
             using (GdPictureDocumentConverter oConverter = new GdPictureDocumentConverter())
-            //  using (GdPicturePDF oConverter = new GdPicturePDF())
             {
-                //Select your source document and its document format.
                 GdPictureStatus status = oConverter.LoadFromStream(fileStream, GdPicture14.DocumentFormat.DocumentFormatDOCX);
 
-                //oConverter.LoadFromFile("input.docx", GdPicture14.DocumentFormat.DocumentFormatDOCX);
                 if (status == GdPictureStatus.OK)
                 {
-                    //Select the conformance of the resulting PDF document.
                     status = oConverter.SaveAsPDF("output.pdf", PdfConformance.PDF_A_1a);
                     if (status == GdPictureStatus.OK)
                     {
-
                         using Stream uploadFileStream = File.OpenRead("output.pdf");
 
-                        return uploadFileStream;
+                        await UploadFileToBlobStorage(uploadFileStream, "output.pdf");
+
+                        uploadFileStream.Close();
                     }
                     else
                     {
@@ -146,5 +133,13 @@ namespace GDPicture.POC.API.Services
                 }
             }
         }
+        private async Task UploadFileToBlobStorage(Stream fileStream, string fileName) 
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+
+            BlobClient blob = containerClient.GetBlobClient(fileName);
+
+            await blob.UploadAsync(fileStream, true);
+        } 
     }
 }
