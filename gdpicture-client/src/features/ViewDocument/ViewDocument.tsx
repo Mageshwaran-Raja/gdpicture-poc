@@ -25,10 +25,10 @@ export default function ViewDocument() {
     const targetRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        //setDocuViewareConfig(prev => )
         docuViewareConfig.SessionId = sessionStorage.getItem("SessionId")!;
         const response = agent.GDPicture.viewDocument(docuViewareConfig);
         response.then(res => {
-            debugger;
             insertMarkup(res, "dvContainer");
         })
     }, []);

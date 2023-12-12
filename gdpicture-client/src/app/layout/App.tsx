@@ -10,11 +10,11 @@ function App() {
 
   useEffect(() => {
     const sessionId = sessionStorage.getItem("SessionId");
-    if (sessionId == null || sessionId == undefined) {
+    if (sessionId === null || sessionId === undefined) {
       const response = agent.Session.getSession();
       response.then(res => {
         const sessionId = sessionStorage.getItem("SessionId");
-        if (sessionId == null || sessionId == undefined) sessionStorage.setItem("SessionId", res);
+        if (sessionId === null || sessionId === undefined) sessionStorage.setItem("SessionId", res);
       })
     }
   }, []);

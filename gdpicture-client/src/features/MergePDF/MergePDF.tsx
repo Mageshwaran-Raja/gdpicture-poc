@@ -5,7 +5,7 @@ const MergePDF: React.FC = () => {
   const [files, setFiles] = useState<Record<string, File>>({});
 
   const addFile = (file: File) => {
-    const isImage = file.type.match('image.*');
+    // const isImage = file.type.match('image.*');
     const objectURL = URL.createObjectURL(file);
 
     setFiles((prevFiles) => ({
@@ -53,7 +53,7 @@ const MergePDF: React.FC = () => {
 
   const handleSubmit = () => {
     alert(`Submitted Files:\n${JSON.stringify(files)}`);
-    const formData = new FormData;
+    const formData = new FormData();
     Object.values(files).forEach((file) => {
         debugger;
         formData.append('files', file);

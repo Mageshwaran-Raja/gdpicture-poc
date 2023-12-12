@@ -10,7 +10,7 @@ const responseBody = (response: AxiosResponse) => response.data;
 axios.interceptors.response.use(response => {
     debugger;
     let contentType = response.headers["content-type"];
-    if (contentType == 'application/pdf') {
+    if (contentType === 'application/pdf') {
         let blob = new File([response.data], "output.pdf", {
             type: "application/pdf"
         })
