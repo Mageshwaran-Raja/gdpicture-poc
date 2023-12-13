@@ -1,6 +1,7 @@
 using GDPicture.POC.API;
 using GDPicture.POC.API.Services;
 using GDPicture.POC.API.SignalR;
+using GDPicture.POC.Application;
 using GdPicture14;
 using GdPicture14.WEB;
 using Microsoft.Extensions.Azure;
@@ -14,11 +15,14 @@ builder.Services.AddSession();
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 
+builder.Services.AddApplicationServices(builder.Configuration);
+
 builder.Services.AddScoped<IAzureBlobStorageService, AzureBlobStorageService>();
 builder.Services.AddScoped<IAzureServiceBusQueue, AzureServiceBusQueue>();
 
 builder.Services.AddAzureClients(opt => {
     opt.AddBlobServiceClient(builder.Configuration.GetValue<string>("StorageConnectionAppSetting"));
+    //opt.AddServiceBusClient(builder.Configuration.GetValue<string>("AzureServiceBusConnectionString"));
 });
 
 builder.Services.AddCors();

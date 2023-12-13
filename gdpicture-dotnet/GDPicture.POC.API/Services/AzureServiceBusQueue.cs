@@ -1,4 +1,3 @@
-
 using System.Text;
 using System.Text.Json;
 using Microsoft.Azure.ServiceBus;
@@ -8,7 +7,7 @@ namespace GDPicture.POC.API.Services
     public class AzureServiceBusQueue : IAzureServiceBusQueue
     {
         private readonly IConfiguration _configuration;
-        private readonly IAzureBlobStorageService _azureBlobStorageService;
+        private readonly IAzureBlobStorageService _azureBlobStorageService;   
         public AzureServiceBusQueue(IConfiguration configuration, IAzureBlobStorageService azureBlobStorageService)
         {
             _configuration = configuration;
