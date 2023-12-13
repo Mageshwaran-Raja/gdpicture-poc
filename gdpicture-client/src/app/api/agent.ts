@@ -8,7 +8,6 @@ axios.defaults.baseURL = "https://localhost:7049/api/";
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(response => {
-    debugger;
     let contentType = response.headers["content-type"];
     if (contentType === 'application/pdf') {
         let blob = new File([response.data], "output.pdf", {
@@ -33,7 +32,7 @@ const request = {
 }
 
 const GDPicture = {
-    convertToPDF: (file: any) => request.postFile("GDPicture/ConvertDocumentToPDF", file),
+    convertToPDF: (file: any) => request.postFile("File", file),
     mergePDF: (file: any) => request.postFile("GDPicture/MergePDF", file),
     viewDocument: (config: DocuViewareConfig) => request.post("DocumentViewer/GetDocuViewareControl", config)
 }

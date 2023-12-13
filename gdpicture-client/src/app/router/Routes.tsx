@@ -11,7 +11,7 @@ export const Router = createBrowserRouter([
         children: [
             {path: 'docuVieware', element: <ViewDocument />},
             {path: 'documenttopdf', element: <PDFConverter/>},
-            {path: 'mergepdf', element: <MergePDF/>}
+            {path: 'mergepdf', element: <MergePDF/>},
         ]
     }
 ])

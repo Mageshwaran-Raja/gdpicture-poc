@@ -5,6 +5,7 @@ import agent from '../api/agent';
 import Notification from '../../components/Notification';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Header from './Header';
 
 function App() {
 
@@ -21,7 +22,7 @@ function App() {
 
   return (
     <>
-      <Notification />
+      <Header />
       <Outlet />
       <ToastContainer />
     </>

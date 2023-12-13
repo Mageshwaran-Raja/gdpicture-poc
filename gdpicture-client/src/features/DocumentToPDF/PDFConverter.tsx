@@ -1,5 +1,6 @@
 import { useState } from "react";
 import agent from "../../app/api/agent";
+import Notification from "../../components/Notification";
 
 export default function PDFConverter() {
     const [fileSelected, setFileSelected] = useState<any>();
@@ -10,7 +11,7 @@ export default function PDFConverter() {
 
     function onClickHandler() {
         const data = new FormData();
-        data.append("file", fileSelected);
+        data.append("formFile", fileSelected);
 
         agent.GDPicture.convertToPDF(data);
 
@@ -18,6 +19,7 @@ export default function PDFConverter() {
     }
     return (
         <>
+            <Notification />
             <div className="flex items-center justify-center w-full">
                 <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                     {!fileSelected &&
